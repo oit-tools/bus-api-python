@@ -101,8 +101,7 @@ class Bus:
         bus = Bus()
         bus.get_bus_info()
 
-        result = bus.return_bus_info()
-        print(result)
+        print(bus.return_bus_info())
 
 
 if __name__ == "__main__":
