@@ -13,15 +13,15 @@ class Bus:
 
     # 運行状況の詳細情報を取得
     def get_bus_info(self):
-        headers = {"User-Agent": "Mozilla/5.0"}
-        html = requests.get(self._rich_url, headers=headers).text
-        soup = BeautifulSoup(html, "html.parser")
-
-        # """時間外用"""
-        # with open("bus.html", "r") as f:
-        #     html = f.read()
+        # headers = {"User-Agent": "Mozilla/5.0"}
+        # html = requests.get(self._rich_url, headers=headers).text
         # soup = BeautifulSoup(html, "html.parser")
-        # """時間外用"""
+
+        """時間外用"""
+        with open("bus.html", "r") as f:
+            html = f.read()
+        soup = BeautifulSoup(html, "html.parser")
+        """時間外用"""
 
         try:
             self._result.update({"bus_service": True})
@@ -68,13 +68,17 @@ class Bus:
         for i in range(len(elem)):
             for j in elem[i].find_all("li"):
                 value.append((j.text).replace(" ", "").replace("\n", ""))
+            self.normalize_bus_info(value)
 
             # 接近情報未取得のものを除外
             if len(value) < 10:
                 value.clear()
                 continue
+            # 系統が違うものを除外
+            elif value[2] not in ["大2A", "2"]:
+                value.clear()
+                continue
             else:
-                self.normalize_bus_info(value)
                 timetable.append(dict(zip(key, value[:-3])))
                 value.clear()
 
