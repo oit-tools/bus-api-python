@@ -13,15 +13,9 @@ class Bus:
 
     # 運行状況の詳細情報を取得
     def get_bus_info(self):
-        # headers = {"User-Agent": "Mozilla/5.0"}
-        # html = requests.get(self._rich_url, headers=headers).text
-        # soup = BeautifulSoup(html, "html.parser")
-
-        """時間外用"""
-        with open("bus.html", "r") as f:
-            html = f.read()
+        headers = {"User-Agent": "Mozilla/5.0"}
+        html = requests.get(self._rich_url, headers=headers).text
         soup = BeautifulSoup(html, "html.parser")
-        """時間外用"""
 
         try:
             self._result.update({"bus_service": True})
@@ -88,7 +82,7 @@ class Bus:
     def normalize_bus_info(self, value):
         value[1] = value[1].replace("到着予定", "")
         value[2] = value[2].replace("系統：", "").replace("[", "").replace("]", "")
-        value[3] = value[3].replace("行先：", "")
+        value[3] = value[3].replace("行先：", "").replace("行", "")
         value[4] = value[4].replace("定刻：", "")
         value[5] = value[5].replace("(", "").replace(")", "")
         value[6] = value[6].replace("経由：", "")
@@ -100,8 +94,9 @@ class Bus:
     def main():
         bus = Bus()
         bus.get_bus_info()
+        bus.return_bus_info()
 
-        print(bus.return_bus_info())
+        # print(bus.return_bus_info())
 
 
 if __name__ == "__main__":
