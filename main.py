@@ -5,12 +5,6 @@ from fastapi import FastAPI
 
 app = FastAPI()
 
-
-@app.get("/hello")
-async def hello():
-    return {"message": "hello world!"}
-
-
 @app.get("/bus")
 async def bus():
     bus = test.Bus()

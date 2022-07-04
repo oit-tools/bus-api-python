@@ -1,4 +1,3 @@
-import json
 import re
 
 import requests
@@ -87,16 +86,13 @@ class Bus:
         value[5] = value[5].replace("(", "").replace(")", "")
         value[6] = value[6].replace("経由：", "")
 
-    # jsonにして出力
+    # 出力
     def return_bus_info(self):
-        return json.dumps(self._result, ensure_ascii=False, indent=4)
+        return self._result
 
     def main():
         bus = Bus()
         bus.get_bus_info()
-        bus.return_bus_info()
-
-        # print(bus.return_bus_info())
 
 
 if __name__ == "__main__":
