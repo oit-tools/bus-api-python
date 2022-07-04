@@ -6,32 +6,30 @@ from bs4 import BeautifulSoup
 
 class Bus:
     def __init__(self):
-        self._rich_url = "https://busnavi.keihanbus.jp/pc/busstatedtl?mode=4&fr=%E5%8C%97%E5%B1%B1%E4%B8%AD%E5%A4%AE&frsk=B&tosk=&dt=202206302320&dgmpl=%E5%8C%97%E5%B1%B1%E4%B8%AD%E5%A4%AE%E3%80%94%E4%BA%AC%E9%98%AA%E3%83%90%E3%82%B9%E3%80%95%3A2%3A1&p=0%2C14%2C15"
-        self._simple_url = "http://busnavi.keihanbus.jp/mobile/index.php/Route/TimeSheet?key_start=%96k%8ER&start=%96k%8ER%92%86%89%9B%81%5E%8B%9E%8D%E3%83o%83X&type=1&se=df681b2a928c0fb0b52ecf89bab8c611"
         self._result = dict()
 
     # 運行状況の詳細情報を取得
-    def get_bus_info(self):
+    def get_bus_info(self, rich_url, simple_url, type_list):
         headers = {"User-Agent": "Mozilla/5.0"}
-        html = requests.get(self._rich_url, headers=headers).text
+        html = requests.get(rich_url, headers=headers).text
         soup = BeautifulSoup(html, "html.parser")
 
         try:
             self._result.update({"bus_service": True})
             # 曜日を取得
-            self.get_day_of_week()
+            self.get_day_of_week(simple_url)
             # バスののりば、おりばを取得
             self.get_bus_station(soup)
             # 運行状況等を取得
-            self.get_bus_timetable(soup)
+            self.get_bus_timetable(soup, type_list)
 
         except AttributeError:
             self._result.clear()
             self._result.update({"bus_service": False})
 
     # 曜日を取得
-    def get_day_of_week(self):
-        html = requests.get(self._simple_url).text
+    def get_day_of_week(self, simple_url):
+        html = requests.get(simple_url).text
         soup = BeautifulSoup(html, "html.parser")
         self._result.update({"dow": soup.find_all("font")[1].text})
 
@@ -41,10 +39,12 @@ class Bus:
             (soup.find(class_="stationHead").text).replace(" ", "").replace("\n", "")
         )
         station = (re.sub(r"\(.*\)", "\n", station)).split("\n")
+        station[0] = station[0].replace("停留所：", "")
+        station[1] = station[1].replace("のりば：", "")
         self._result.update({"bus_terminal": station[1], "bus_stop": station[0]})
 
     # 運行状況等を取得
-    def get_bus_timetable(self, soup):
+    def get_bus_timetable(self, soup, type_list):
         elem = soup.find_all(class_="fl bsdtl")
         key = [
             "arrive",
@@ -62,13 +62,12 @@ class Bus:
             for j in elem[i].find_all("li"):
                 value.append((j.text).replace(" ", "").replace("\n", ""))
             self.normalize_bus_info(value)
-
             # 接近情報未取得のものを除外
-            if len(value) < 10:
+            if len(value) < 9:
                 value.clear()
                 continue
             # 系統が違うものを除外
-            elif value[2] not in ["大2A", "2"]:
+            elif value[2] not in type_list:
                 value.clear()
                 continue
             else:
@@ -89,11 +88,3 @@ class Bus:
     # 出力
     def return_bus_info(self):
         return self._result
-
-    def main():
-        bus = Bus()
-        bus.get_bus_info()
-
-
-if __name__ == "__main__":
-    Bus.main()
