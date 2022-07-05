@@ -26,16 +26,6 @@ async def kuzuha_to_oit():
     return bus.kuzuha_to_oit()
 
 
-@app.get("/oit-hirakata")
-async def oit_to_hirakata():
-    return bus.oit_to_hirakata()
-
-
-@app.get("/hirakata-oit")
-async def hirakata_to_oit():
-    return bus.hirakata_to_oit()
-
-
 def main():
     uvicorn.run(app, host="localhost", port=8000, reload=True)
 

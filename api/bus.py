@@ -33,22 +33,6 @@ def kuzuha_to_oit():
     return get_info(rich_url, simple_url, type_list)
 
 
-def oit_to_hirakata():
-    rich_url = ""
-    simple_url = ""
-    type_list = [""]
-
-    return get_info(rich_url, simple_url, type_list)
-
-
-def hirakata_to_oit():
-    rich_url = ""
-    simple_url = ""
-    type_list = [""]
-
-    return get_info(rich_url, simple_url, type_list)
-
-
 def get_info(rich_url, simple_url, type_list):
     bus = api.scraping.Bus
     return bus.main(rich_url, simple_url, type_list)
