@@ -6,7 +6,7 @@ def oit_to_nagao():
     simple_url = "http://busnavi.keihanbus.jp/mobile/index.php/Route/TimeSheet?key_start=%96k%8ER%92%86%89%9B&key_end=%92%B7%94%F6&start=%96k%8ER%92%86%89%9B%81%5E%8B%9E%8D%E3%83o%83X&end=%92%B7%94%F6%89w%81%5E%8B%9E%8D%E3%83o%83X&se=a295301252a9917b4a22f89da9478e10"
     type_list = ["直通", "29"]
 
-    return return_info(rich_url, simple_url, type_list)
+    return get_info(rich_url, simple_url, type_list)
 
 
 def nagao_to_oit():
@@ -14,7 +14,7 @@ def nagao_to_oit():
     simple_url = "http://busnavi.keihanbus.jp/mobile/index.php/Route/TimeSheet?key_start=%96k%8ER&start=%96k%8ER%92%86%89%9B%81%5E%8B%9E%8D%E3%83o%83X&type=1&se=df681b2a928c0fb0b52ecf89bab8c611"
     type_list = ["直通", "27", "29", "37"]
 
-    return return_info(rich_url, simple_url, type_list)
+    return get_info(rich_url, simple_url, type_list)
 
 
 def oit_to_kuzuha():
@@ -22,7 +22,7 @@ def oit_to_kuzuha():
     simple_url = "http://busnavi.keihanbus.jp/mobile/index.php/Route/TimeSheet?key_start=%96k%8ER&start=%96k%8ER%92%86%89%9B%81%5E%8B%9E%8D%E3%83o%83X&type=1&se=df681b2a928c0fb0b52ecf89bab8c611"
     type_list = ["1", "2", "2A"]
 
-    return return_info(rich_url, simple_url, type_list)
+    return get_info(rich_url, simple_url, type_list)
 
 
 def kuzuha_to_oit():
@@ -30,7 +30,7 @@ def kuzuha_to_oit():
     simple_url = "http://busnavi.keihanbus.jp/mobile/index.php/Route/TimeSheet?key_start=%8F%BE%97t&start=%8F%BE%97t%89w%81%5E%8B%9E%8D%E3%83o%83X&type=1&se=aaa253f7a16306ccf16522f86e5a808b"
     type_list = ["直通", "大2", "大2A"]
 
-    return return_info(rich_url, simple_url, type_list)
+    return get_info(rich_url, simple_url, type_list)
 
 
 def oit_to_hirakata():
@@ -38,7 +38,7 @@ def oit_to_hirakata():
     simple_url = ""
     type_list = [""]
 
-    return return_info(rich_url, simple_url, type_list)
+    return get_info(rich_url, simple_url, type_list)
 
 
 def hirakata_to_oit():
@@ -46,9 +46,9 @@ def hirakata_to_oit():
     simple_url = ""
     type_list = [""]
 
-    return return_info(rich_url, simple_url, type_list)
+    return get_info(rich_url, simple_url, type_list)
 
 
-def return_info(rich_url, simple_url, type_list):
+def get_info(rich_url, simple_url, type_list):
     bus = api.scraping.Bus
     return bus.main(rich_url, simple_url, type_list)
