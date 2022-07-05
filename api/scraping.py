@@ -27,13 +27,15 @@ class Bus:
             self._result.clear()
             self._result.update({"bus_service": False})
 
+        return self._result
+
     # 曜日を取得
     def get_day_of_week(self, simple_url):
         html = requests.get(simple_url).text
         soup = BeautifulSoup(html, "html.parser")
         self._result.update({"dow": soup.find_all("font")[1].text})
 
-    # バスののりば、おりばを取得
+    # バスの停留所、のりばを取得
     def get_bus_station(self, soup):
         station = (
             (soup.find(class_="stationHead").text).replace(" ", "").replace("\n", "")
@@ -85,6 +87,7 @@ class Bus:
         value[5] = value[5].replace("(", "").replace(")", "")
         value[6] = value[6].replace("経由：", "")
 
-    # 出力
-    def return_bus_info(self):
-        return self._result
+    # 取得した情報を返す
+    def main(rich_url, simple_url, type_list):
+        bus = Bus()
+        return bus.get_bus_info(rich_url, simple_url, type_list)
